@@ -37,4 +37,11 @@ app.post('/account', (req, res) => {
     return res.status(201).send();
 });
 
+//Listando Extrato
+app.get('/statement/:cpf', (req,res) => {
+    const{cpf} = req.params
+    const costumer = customers.find(costumer =>
+        costumer.cpf===cpf)
+        return res.json(costumer.statement)
+})
 app.listen(3333)
