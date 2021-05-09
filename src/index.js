@@ -38,8 +38,8 @@ app.post('/account', (req, res) => {
 });
 
 //Listando Extrato
-app.get('/statement/:cpf', (req,res) => {
-    const{cpf} = req.params
+app.get('/statement', (req,res) => {
+    const{cpf} = req.headers
     const custumer = customers.find(costumer =>
         costumer.cpf===cpf)
 
