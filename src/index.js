@@ -76,6 +76,7 @@ app.get('/statement', verifyIfExistsAccountCPF, (req, res) => {
     return res.json(customer.statement)
 })
 
+//Criando Depósito na conta
 app.post('/deposit', verifyIfExistsAccountCPF, (req, res) => {
     const {
         description,
@@ -97,6 +98,7 @@ app.post('/deposit', verifyIfExistsAccountCPF, (req, res) => {
     return res.status(201).send()
 })
 
+//Criando Saque na conta / verificando se pode sacar
 app.post('/withdraw', verifyIfExistsAccountCPF, (req, res) => {
     const {
         amount
@@ -167,7 +169,13 @@ app.delete('/account', verifyIfExistsAccountCPF, (req, res) => {
     } = req
     customers.splice(customer, 1);
     return res.status(200).json(customers);
+})
 
+//Retornando o balance (quanto tem em conta)
+app.get('/balance', verifyIfExistsAccountCPF,(req,res)=>{
+const {customer} = req
+const balance = getBalance(customer.statement)
+return res.json(balance)
 })
 
 app.listen(3333)
