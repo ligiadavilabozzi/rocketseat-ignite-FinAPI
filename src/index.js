@@ -8,12 +8,17 @@ app.use(express.json())
 
 const customers = [];
 
-/** DADOS DA CONTA
- * cpf - string => recebe do cliente
- * name - string => recebe do cliente
- * id - uuid  => app cria
- * statement (lançamentos) - [] 
- */
+function verifyIfExistsAccountCPF(req,res,next){
+    const{cpf} = req.headers
+    const customer = customers.find(customer =>
+        customer.cpf===cpf)
+        // verificando se existe o customer 
+if(!customer){
+    return res.status(400).json({error:"Customer not found"})
+}
+req.customer = customer 
+return next();
+}
 
 app.post('/account', (req, res) => {
     const {cpf, name} = req.body;
@@ -38,16 +43,8 @@ app.post('/account', (req, res) => {
 });
 
 //Listando Extrato
-app.get('/statement', (req,res) => {
-    const{cpf} = req.headers
-    const custumer = customers.find(costumer =>
-        costumer.cpf===cpf)
-
-// verificando se existe o customer 
-if(!custumer){
-    return res.status(400).json({error:"Customer not found"})
-
-}
-        return res.json(custumer.statement)
+app.get('/statement', verifyIfExistsAccountCPF, (req,res) => {
+const {customer} = req
+        return res.json(customer.statement)
 })
 app.listen(3333)
