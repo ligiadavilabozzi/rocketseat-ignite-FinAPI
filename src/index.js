@@ -18,7 +18,7 @@ const customers = [];
 app.post('/account', (req, res) => {
     const {cpf, name} = req.body;
     const customerAlreadyExists = customers.some(
-        (costumer) => costumer.cpf === cpf
+        (customer) => customer.cpf === cpf
     );
     
     if(customerAlreadyExists){
@@ -40,8 +40,14 @@ app.post('/account', (req, res) => {
 //Listando Extrato
 app.get('/statement/:cpf', (req,res) => {
     const{cpf} = req.params
-    const costumer = customers.find(costumer =>
+    const custumer = customers.find(costumer =>
         costumer.cpf===cpf)
-        return res.json(costumer.statement)
+
+// verificando se existe o customer 
+if(!custumer){
+    return res.status(400).json({error:"Customer not found"})
+
+}
+        return res.json(custumer.statement)
 })
 app.listen(3333)
