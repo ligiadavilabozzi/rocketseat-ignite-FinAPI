@@ -98,8 +98,12 @@ app.post('/deposit', verifyIfExistsAccountCPF, (req, res) => {
 })
 
 app.post('/withdraw', verifyIfExistsAccountCPF, (req, res) => {
-    const {amount} = req.body
-    const {customer} = req
+    const {
+        amount
+    } = req.body
+    const {
+        customer
+    } = req
     const balance = getBalance(customer.statement) //entre ( ) é onde ficaram os valores
     if (balance < amount) {
         return res.status(400).json({
@@ -117,19 +121,34 @@ app.post('/withdraw', verifyIfExistsAccountCPF, (req, res) => {
 })
 
 //Busca do extrato por data
-app.get('/statement/date', verifyIfExistsAccountCPF, (req,res) => { 
-    const { customer } = req 
-    const { date } = req.query 
+app.get('/statement/date', verifyIfExistsAccountCPF, (req, res) => {
+    const {
+        customer
+    } = req
+    const {
+        date
+    } = req.query
 
     const dateFormat = new Date(date + " 00:00")
 
     const statement = customer.statement.filter(
-    (statement) => 
-    statement.created_at.toDateString() === 
-    new Date(dateFormat).toDateString() 
+        (statement) =>
+        statement.created_at.toDateString() ===
+        new Date(dateFormat).toDateString()
     )
     return res.json(statement)
-    })
+})
 
+// Altera dados (nome)
+app.put('/account', verifyIfExistsAccountCPF, (req, res) => {
 
+    const {
+        name
+    } = req.body
+    const {
+        customer
+    } = req
+    customer.name = name;
+    return res.status(201).send()
+});
 app.listen(3333)
