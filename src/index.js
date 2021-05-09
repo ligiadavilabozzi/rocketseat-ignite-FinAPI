@@ -151,4 +151,23 @@ app.put('/account', verifyIfExistsAccountCPF, (req, res) => {
     customer.name = name;
     return res.status(201).send()
 });
+
+//Retorna dados da conta 
+app.get('/account', verifyIfExistsAccountCPF, (req, res) => {
+    const {
+        customer
+    } = req
+    return res.json(customer);
+});
+
+//Excluir conta
+app.delete('/account', verifyIfExistsAccountCPF, (req, res) => {
+    const {
+        customer
+    } = req
+    customers.splice(customer, 1);
+    return res.status(200).json(customers);
+
+})
+
 app.listen(3333)
